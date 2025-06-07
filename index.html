@@ -318,6 +318,96 @@
                 inset 0 1px 2px rgba(255, 255, 255, 0.2);
         }
 
+        #newRecord {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(145deg, rgba(255, 215, 0, 0.95), rgba(255, 165, 0, 0.9));
+            padding: 30px;
+            border: 3px solid #B8860B;
+            border-radius: 20px;
+            text-align: center;
+            z-index: 30;
+            display: none;
+            font-family: 'Arial', sans-serif;
+            backdrop-filter: blur(5px);
+            box-shadow: 
+                0 12px 24px rgba(0, 0, 0, 0.5),
+                inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            animation: recordBounce 0.8s ease-out;
+        }
+
+        @keyframes recordBounce {
+            0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        #newRecord h2 {
+            color: #8B0000;
+            margin-bottom: 15px;
+            font-size: 22px;
+            font-weight: bold;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.3),
+                0 0 8px rgba(139, 0, 0, 0.4);
+        }
+
+        #newRecord p {
+            margin: 10px 0;
+            font-size: 16px;
+            color: #2F4F2F;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+        }
+
+        #saveRecordBtn {
+            background: linear-gradient(45deg, #228B22, #32CD32);
+            color: #FFFFFF;
+            border: 2px solid #006400;
+            border-radius: 25px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            font-family: 'Arial', sans-serif;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 2px rgba(255, 255, 255, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        #saveRecordBtn:hover {
+            background: linear-gradient(45deg, #32CD32, #00FF32);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 6px 12px rgba(0, 0, 0, 0.4),
+                inset 0 1px 2px rgba(255, 255, 255, 0.4);
+        }
+
+        #saveRecordBtn:active {
+            transform: translateY(0px);
+            box-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.3),
+                inset 0 1px 2px rgba(255, 255, 255, 0.2);
+        }
+
+        #currentRecord {
+            font-size: 14px !important;
+            color: #FFD700 !important;
+            background: linear-gradient(45deg, rgba(139, 69, 19, 0.7), rgba(160, 82, 45, 0.5));
+            padding: 8px 12px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 215, 0, 0.4);
+            margin: 15px 0 !important;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 6px rgba(255, 215, 0, 0.4) !important;
+        }
+
         #instructions {
             position: absolute;
             bottom: 20px;
@@ -435,7 +525,40 @@
             <p id="finalScore">Puntuación Final: 0</p>
             <p id="finalLevel">Nivel Alcanzado: 1</p>
             <p id="bestScore">Mejor Puntuación: 0</p>
+            <p id="currentRecord">🏆 Récord: <span id="recordHolder">MONITO</span> - <span id="recordScore">0</span></p>
             <button id="restartBtn">🔄 Jugar de nuevo</button>
+        </div>
+        
+        <div id="newRecord">
+            <h2>🎉 ¡NUEVO RÉCORD! 🎉</h2>
+            <p>¡Has batido el récord anterior!</p>
+            <p>Puntuación: <span id="newRecordScore">0</span></p>
+            <div style="margin: 15px 0;">
+                <label for="playerName" style="color: #FFD700; font-weight: bold; display: block; margin-bottom: 8px;">
+                    Introduce tu nombre:
+                </label>
+                <input 
+                    type="text" 
+                    id="playerName" 
+                    maxlength="10" 
+                    placeholder="TU NOMBRE" 
+                    style="
+                        padding: 8px 12px;
+                        font-size: 16px;
+                        font-weight: bold;
+                        text-align: center;
+                        text-transform: uppercase;
+                        background: linear-gradient(45deg, #2F4F2F, #1C3A1C);
+                        color: #FFD700;
+                        border: 2px solid #FFD700;
+                        border-radius: 8px;
+                        outline: none;
+                        font-family: 'Arial', sans-serif;
+                        width: 150px;
+                    "
+                />
+            </div>
+            <button id="saveRecordBtn">💾 Guardar Récord</button>
         </div>
         
         <div id="instructions">
@@ -461,6 +584,12 @@
                 this.restartBtn = document.getElementById('restartBtn');
                 this.levelUpScreen = document.getElementById('levelUp');
                 this.levelUpText = document.getElementById('levelUpText');
+                this.newRecordScreen = document.getElementById('newRecord');
+                this.newRecordScore = document.getElementById('newRecordScore');
+                this.playerNameInput = document.getElementById('playerName');
+                this.saveRecordBtn = document.getElementById('saveRecordBtn');
+                this.recordHolderElement = document.getElementById('recordHolder');
+                this.recordScoreElement = document.getElementById('recordScore');
                 
                 // Sistema de audio
                 this.audioContext = null;
@@ -473,6 +602,7 @@
                 this.score = 0;
                 this.level = 1;
                 this.bestScore = localStorage.getItem('bestScore') || 0;
+                this.bestScoreName = localStorage.getItem('bestScoreName') || 'MONITO';
                 this.gameRunning = false;
                 this.trees = [];
                 this.treeWidth = 80;
@@ -572,9 +702,15 @@
             
             init() {
                 this.bestScoreElement.textContent = `Mejor Puntuación: ${this.bestScore}`;
+                this.updateRecordDisplay();
                 this.updateLevel();
                 this.bindEvents();
                 this.startGame();
+            }
+            
+            updateRecordDisplay() {
+                this.recordHolderElement.textContent = this.bestScoreName;
+                this.recordScoreElement.textContent = this.bestScore;
             }
             
             updateLevel() {
@@ -676,6 +812,16 @@
                 
                 // Restart button
                 this.restartBtn.addEventListener('click', () => this.restart());
+                
+                // Save record button
+                this.saveRecordBtn.addEventListener('click', () => this.saveNewRecord());
+                
+                // Enter key on name input
+                this.playerNameInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        this.saveNewRecord();
+                    }
+                });
                 
                 // Keyboard support
                 document.addEventListener('keydown', (e) => {
@@ -861,24 +1007,58 @@
                 // Reproducir sonido de game over
                 this.playSound('gameOver');
                 
-                // Actualizar mejor puntuación
+                // Comprobar si es nuevo récord
                 if (this.score > this.bestScore) {
-                    this.bestScore = this.score;
-                    localStorage.setItem('bestScore', this.bestScore);
-                    this.bestScoreElement.textContent = `¡NUEVO RÉCORD! ${this.bestScore}`;
-                    this.bestScoreElement.style.color = '#e74c3c';
+                    // Es nuevo récord - mostrar pantalla para introducir nombre
+                    this.newRecordScore.textContent = this.score;
+                    this.playerNameInput.value = '';
+                    this.playerNameInput.focus();
+                    this.newRecordScreen.style.display = 'block';
+                    
+                    // Reproducir sonido especial de récord
+                    setTimeout(() => this.playSound('levelUp'), 300);
                 } else {
-                    this.bestScoreElement.textContent = `Mejor Puntuación: ${this.bestScore}`;
-                    this.bestScoreElement.style.color = '#333';
+                    // No es récord - mostrar game over normal
+                    this.showGameOverScreen();
                 }
-                
-                this.finalScoreElement.textContent = `Puntuación Final: ${this.score}`;
-                this.finalLevelElement.textContent = `Nivel Alcanzado: ${this.level} - ${this.levels[this.level - 1].name}`;
-                this.gameOverScreen.style.display = 'block';
                 
                 // Animación de caída del monito
                 this.monkey.style.transform = 'rotate(90deg)';
                 this.monkey.style.transition = 'all 0.5s ease-out';
+            }
+            
+            showGameOverScreen() {
+                this.finalScoreElement.textContent = `Puntuación Final: ${this.score}`;
+                this.finalLevelElement.textContent = `Nivel Alcanzado: ${this.level} - ${this.levels[this.level - 1].name}`;
+                this.bestScoreElement.textContent = `Mejor Puntuación: ${this.bestScore}`;
+                this.updateRecordDisplay();
+                this.gameOverScreen.style.display = 'block';
+            }
+            
+            saveNewRecord() {
+                let playerName = this.playerNameInput.value.trim().toUpperCase();
+                
+                // Si no introduce nombre, usar valor por defecto
+                if (!playerName) {
+                    playerName = 'JUGADOR';
+                }
+                
+                // Guardar nuevo récord
+                this.bestScore = this.score;
+                this.bestScoreName = playerName;
+                localStorage.setItem('bestScore', this.bestScore);
+                localStorage.setItem('bestScoreName', this.bestScoreName);
+                
+                // Ocultar pantalla de nuevo récord y mostrar game over
+                this.newRecordScreen.style.display = 'none';
+                this.showGameOverScreen();
+                
+                // Actualizar display del récord
+                this.updateRecordDisplay();
+                
+                // Resaltar el nuevo récord
+                this.bestScoreElement.textContent = `¡NUEVO RÉCORD! ${this.bestScore}`;
+                this.bestScoreElement.style.color = '#e74c3c';
             }
             
             restart() {
@@ -897,6 +1077,7 @@
                 this.scoreElement.textContent = 'Puntuación: 0';
                 this.gameOverScreen.style.display = 'none';
                 this.levelUpScreen.style.display = 'none';
+                this.newRecordScreen.style.display = 'none';
                 
                 // Resetear dificultad al nivel 1
                 this.updateGameDifficulty();
