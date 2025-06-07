@@ -220,6 +220,42 @@
             backdrop-filter: blur(3px);
         }
 
+        #musicControl {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, rgba(139, 69, 19, 0.8), rgba(160, 82, 45, 0.6));
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 20;
+            backdrop-filter: blur(3px);
+            transition: all 0.2s ease;
+            font-size: 18px;
+            color: #FFD700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        #musicControl:hover {
+            transform: scale(1.1);
+            background: linear-gradient(45deg, rgba(160, 82, 45, 0.9), rgba(139, 69, 19, 0.7));
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        #musicControl:active {
+            transform: scale(0.95);
+        }
+
+        .music-muted {
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+
         #levelUp {
             position: absolute;
             top: 50%;
@@ -513,6 +549,7 @@
         
         <div id="score">Puntuación: 0</div>
         <div id="level">Nivel: 1</div>
+        <div id="musicControl" title="Música ON/OFF">🎵</div>
         
         <div id="levelUp">
             <div>🎉 ¡NIVEL COMPLETADO! 🎉</div>
@@ -590,10 +627,16 @@
                 this.saveRecordBtn = document.getElementById('saveRecordBtn');
                 this.recordHolderElement = document.getElementById('recordHolder');
                 this.recordScoreElement = document.getElementById('recordScore');
+                this.musicControl = document.getElementById('musicControl');
                 
                 // Sistema de audio
                 this.audioContext = null;
                 this.initAudio();
+                
+                // Sistema de música de fondo
+                this.backgroundMusic = null;
+                this.musicEnabled = localStorage.getItem('musicEnabled') !== 'false'; // Por defecto activada
+                this.initBackgroundMusic();
                 
                 this.monkeyY = 250;
                 this.monkeyVelocity = 0;
@@ -698,6 +741,71 @@
                 
                 oscillator.start(this.audioContext.currentTime);
                 oscillator.stop(this.audioContext.currentTime + (type === 'gameOver' ? 1 : 0.3));
+            }
+            
+            initBackgroundMusic() {
+                try {
+                    this.backgroundMusic = new Audio('background_music/Flying Monkey Madness.mp3');
+                    this.backgroundMusic.loop = true;
+                    this.backgroundMusic.volume = 0.3; // Volumen moderado
+                    this.backgroundMusic.preload = 'auto';
+                    
+                    // Actualizar UI según estado
+                    this.updateMusicControlUI();
+                    
+                    // Intentar reproducir cuando el usuario interactúe
+                    this.setupMusicAutoplay();
+                } catch (e) {
+                    console.log('Error cargando música de fondo:', e);
+                }
+            }
+            
+            setupMusicAutoplay() {
+                // Reproducir música en la primera interacción del usuario
+                const firstInteraction = () => {
+                    if (this.musicEnabled && this.backgroundMusic) {
+                        this.backgroundMusic.play().catch(e => {
+                            console.log('No se pudo reproducir música automáticamente:', e);
+                        });
+                    }
+                    // Remover listeners después de la primera interacción
+                    document.removeEventListener('click', firstInteraction);
+                    document.removeEventListener('keydown', firstInteraction);
+                    document.removeEventListener('touchstart', firstInteraction);
+                };
+                
+                document.addEventListener('click', firstInteraction);
+                document.addEventListener('keydown', firstInteraction);
+                document.addEventListener('touchstart', firstInteraction);
+            }
+            
+            toggleMusic() {
+                this.musicEnabled = !this.musicEnabled;
+                localStorage.setItem('musicEnabled', this.musicEnabled);
+                
+                if (this.backgroundMusic) {
+                    if (this.musicEnabled) {
+                        this.backgroundMusic.play().catch(e => {
+                            console.log('Error reproduciendo música:', e);
+                        });
+                    } else {
+                        this.backgroundMusic.pause();
+                    }
+                }
+                
+                this.updateMusicControlUI();
+            }
+            
+            updateMusicControlUI() {
+                if (this.musicEnabled) {
+                    this.musicControl.textContent = '🎵';
+                    this.musicControl.classList.remove('music-muted');
+                    this.musicControl.title = 'Música ON - Click para apagar';
+                } else {
+                    this.musicControl.textContent = '🔇';
+                    this.musicControl.classList.add('music-muted');
+                    this.musicControl.title = 'Música OFF - Click para encender';
+                }
             }
             
             init() {
@@ -815,6 +923,9 @@
                 
                 // Save record button
                 this.saveRecordBtn.addEventListener('click', () => this.saveNewRecord());
+                
+                // Music control button
+                this.musicControl.addEventListener('click', () => this.toggleMusic());
                 
                 // Enter key on name input
                 this.playerNameInput.addEventListener('keydown', (e) => {
