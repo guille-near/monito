@@ -528,6 +528,85 @@
                 opacity: 0;
             }
         }
+
+        /* Media Queries para móvil */
+        @media (max-width: 480px) {
+            #birthday-message {
+                font-size: 18px;
+                padding: 8px 12px;
+                top: 10px;
+                transform: translateX(-50%) scale(0.8);
+            }
+            
+            #gameContainer {
+                width: 95vw;
+                max-width: 380px;
+                height: 85vh;
+                max-height: 600px;
+            }
+            
+            #gameOver {
+                width: 85%;
+                max-width: 320px;
+                padding: 20px;
+                margin: 0 auto;
+            }
+            
+            #newRecord {
+                width: 85%;
+                max-width: 320px;
+                padding: 20px;
+                margin: 0 auto;
+            }
+            
+            #restartBtn, #saveRecordBtn {
+                padding: 15px 25px;
+                font-size: 18px;
+                min-height: 50px;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
+            }
+            
+            #playerName {
+                font-size: 18px !important;
+                padding: 12px 16px !important;
+                min-height: 50px;
+                width: 200px !important;
+            }
+            
+            #score {
+                top: 15px;
+                left: 15px;
+                font-size: 16px;
+                padding: 6px 10px;
+            }
+            
+            #level {
+                top: 15px;
+                right: 15px;
+                font-size: 12px;
+                padding: 4px 8px;
+            }
+            
+            #musicControl {
+                top: 60px;
+                right: 15px;
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+            
+            #instructions {
+                bottom: 10px;
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+            
+            #footer {
+                bottom: 5px;
+                font-size: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -911,21 +990,52 @@
             }
             
             bindEvents() {
-                // Click y touch events
-                this.gameContainer.addEventListener('click', () => this.jump());
+                // Click y touch events - evitar interferencia con botones
+                this.gameContainer.addEventListener('click', (e) => {
+                    // No saltar si se hace click en botones o modals
+                    if (e.target.tagName === 'BUTTON' || 
+                        e.target.tagName === 'INPUT' ||
+                        e.target.closest('#gameOver') ||
+                        e.target.closest('#newRecord') ||
+                        e.target.closest('#musicControl')) {
+                        return;
+                    }
+                    this.jump();
+                });
+                
                 this.gameContainer.addEventListener('touchstart', (e) => {
+                    // No saltar si se toca botones o modals
+                    if (e.target.tagName === 'BUTTON' || 
+                        e.target.tagName === 'INPUT' ||
+                        e.target.closest('#gameOver') ||
+                        e.target.closest('#newRecord') ||
+                        e.target.closest('#musicControl')) {
+                        return;
+                    }
                     e.preventDefault();
                     this.jump();
                 });
                 
-                // Restart button
+                // Restart button - añadir soporte touch para móvil
                 this.restartBtn.addEventListener('click', () => this.restart());
+                this.restartBtn.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    this.restart();
+                });
                 
-                // Save record button
+                // Save record button - añadir soporte touch para móvil
                 this.saveRecordBtn.addEventListener('click', () => this.saveNewRecord());
+                this.saveRecordBtn.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    this.saveNewRecord();
+                });
                 
-                // Music control button
+                // Music control button - añadir soporte touch para móvil
                 this.musicControl.addEventListener('click', () => this.toggleMusic());
+                this.musicControl.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    this.toggleMusic();
+                });
                 
                 // Enter key on name input
                 this.playerNameInput.addEventListener('keydown', (e) => {
