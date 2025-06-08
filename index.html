@@ -256,6 +256,197 @@
             filter: grayscale(100%);
         }
 
+        /* Bananas coleccionables */
+        .collectible-banana {
+            position: absolute;
+            font-size: 20px;
+            z-index: 10;
+            animation: bananaFloat 2s ease-in-out infinite;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .collectible-banana:hover {
+            transform: scale(1.2);
+        }
+
+        @keyframes bananaFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(10deg); }
+        }
+
+        /* Escudo temporal */
+        .shield-active {
+            box-shadow: 0 0 20px #00FFFF, 0 0 40px #00FFFF !important;
+            filter: drop-shadow(0 0 10px #00FFFF) !important;
+        }
+
+        .shield-indicator {
+            position: absolute;
+            top: 120px;
+            right: 20px;
+            font-size: 24px;
+            color: #00FFFF;
+            text-shadow: 0 0 10px #00FFFF;
+            z-index: 20;
+            animation: shieldPulse 1s ease-in-out infinite;
+        }
+
+        @keyframes shieldPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        /* Contador de bananas */
+        #bananaCount {
+            position: absolute;
+            top: 70px;
+            left: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #FFD700;
+            z-index: 20;
+            font-family: 'Arial', sans-serif;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 8px rgba(255, 215, 0, 0.3);
+            background: linear-gradient(45deg, rgba(255, 140, 0, 0.7), rgba(255, 165, 0, 0.5));
+            padding: 6px 10px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 215, 0, 0.4);
+            backdrop-filter: blur(3px);
+        }
+
+        /* Contador de combo */
+        #comboCounter {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            font-size: 18px;
+            font-weight: bold;
+            color: #FF6B6B;
+            z-index: 15;
+            font-family: 'Arial', sans-serif;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 8px rgba(255, 107, 107, 0.5);
+            background: linear-gradient(45deg, rgba(255, 107, 107, 0.8), rgba(255, 69, 0, 0.6));
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 107, 107, 0.5);
+            backdrop-filter: blur(3px);
+            display: none;
+            animation: comboGlow 0.5s ease-in-out;
+        }
+
+        @keyframes comboGlow {
+            0% { transform: translateY(-50%) scale(0.8); opacity: 0; }
+            100% { transform: translateY(-50%) scale(1); opacity: 1; }
+        }
+
+        /* Parallax layers */
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .clouds-layer {
+            background: 
+                radial-gradient(ellipse at 10% 20%, rgba(255, 255, 255, 0.6) 8%, transparent 12%),
+                radial-gradient(ellipse at 30% 15%, rgba(255, 255, 255, 0.4) 12%, transparent 16%),
+                radial-gradient(ellipse at 60% 25%, rgba(255, 255, 255, 0.5) 10%, transparent 14%),
+                radial-gradient(ellipse at 80% 10%, rgba(255, 255, 255, 0.3) 15%, transparent 19%);
+            animation: parallaxClouds 20s linear infinite;
+        }
+
+        .mountains-layer {
+            background: 
+                radial-gradient(ellipse at 15% 85%, rgba(34, 139, 34, 0.4) 30%, transparent 35%),
+                radial-gradient(ellipse at 45% 90%, rgba(34, 139, 34, 0.3) 40%, transparent 45%),
+                radial-gradient(ellipse at 75% 88%, rgba(34, 139, 34, 0.5) 25%, transparent 30%);
+            animation: parallaxMountains 30s linear infinite;
+        }
+
+        @keyframes parallaxClouds {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @keyframes parallaxMountains {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Partículas de hojas */
+        .particle {
+            position: absolute;
+            width: 6px;
+            height: 4px;
+            background: radial-gradient(ellipse, #228B22 60%, transparent 70%);
+            border-radius: 50% 10% 50% 10%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .particle-fall {
+            animation: particleFall 4s linear infinite;
+        }
+
+        @keyframes particleFall {
+            0% {
+                transform: translateY(-20px) translateX(0px) rotate(0deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(620px) translateX(30px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Efectos de viento */
+        .wind-effect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+            animation: windSweep 3s ease-in-out infinite;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        @keyframes windSweep {
+            0%, 100% { transform: translateX(-100%); opacity: 0; }
+            50% { transform: translateX(100%); opacity: 1; }
+        }
+
+        /* Animaciones mejoradas del mono */
+        .monkey-flap {
+            animation: monkeyFlap 0.3s ease-out;
+        }
+
+        @keyframes monkeyFlap {
+            0% { transform: rotate(-20deg) scale(1); }
+            50% { transform: rotate(-25deg) scale(1.05); }
+            100% { transform: rotate(-15deg) scale(1); }
+        }
+
+        .monkey-fall {
+            animation: monkeyFall 2s ease-in infinite;
+        }
+
+        @keyframes monkeyFall {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            75% { transform: rotate(-5deg); }
+        }
+
         #levelUp {
             position: absolute;
             top: 50%;
@@ -606,16 +797,45 @@
                 bottom: 5px;
                 font-size: 10px;
             }
+            
+            #bananaCount {
+                top: 60px;
+                left: 15px;
+                font-size: 14px;
+                padding: 4px 8px;
+            }
+            
+            #comboCounter {
+                font-size: 16px;
+                padding: 6px 10px;
+            }
+            
+            .collectible-banana {
+                font-size: 18px;
+            }
+            
+            .shield-indicator {
+                top: 100px;
+                right: 15px;
+                font-size: 20px;
+            }
         }
     </style>
 </head>
 <body>
     <div id="birthday-message">🎉 ¡FELICIDADES MONITO! 🎂</div>
     <div id="gameContainer">
+        <!-- Parallax layers -->
+        <div class="parallax-layer clouds-layer"></div>
+        <div class="parallax-layer mountains-layer"></div>
+        
+        <!-- Efectos de viento -->
+        <div class="wind-effect"></div>
+        
         <!-- Fondo de la selva -->
         <div class="jungle-bg"></div>
         
-        <!-- Hojas flotantes -->
+        <!-- Hojas flotantes mejoradas -->
         <div class="floating-leaf leaf-1"></div>
         <div class="floating-leaf leaf-2"></div>
         <div class="floating-leaf leaf-3"></div>
@@ -628,6 +848,8 @@
         
         <div id="score">Puntuación: 0</div>
         <div id="level">Nivel: 1</div>
+        <div id="bananaCount">🍌 x 0</div>
+        <div id="comboCounter">COMBO x2</div>
         <div id="musicControl" title="Música ON/OFF">🎵</div>
         
         <div id="levelUp">
@@ -707,6 +929,8 @@
                 this.recordHolderElement = document.getElementById('recordHolder');
                 this.recordScoreElement = document.getElementById('recordScore');
                 this.musicControl = document.getElementById('musicControl');
+                this.bananaCountElement = document.getElementById('bananaCount');
+                this.comboCounterElement = document.getElementById('comboCounter');
                 
                 // Sistema de audio
                 this.audioContext = null;
@@ -727,6 +951,16 @@
                 this.bestScoreName = localStorage.getItem('bestScoreName') || 'MONITO';
                 this.gameRunning = false;
                 this.trees = [];
+                this.bananas = [];
+                this.particles = [];
+                
+                // Nuevas mecánicas
+                this.bananaCount = 0;
+                this.isShielded = false;
+                this.shieldEndTime = 0;
+                this.combo = 0;
+                this.comboTimer = 0;
+                this.lastTreeTime = 0;
                 this.treeWidth = 80;
                 this.basePipeGap = 180;
                 this.basePipeSpeed = 1.5;
@@ -891,6 +1125,7 @@
                 this.bestScoreElement.textContent = `Mejor Puntuación: ${this.bestScore}`;
                 this.updateRecordDisplay();
                 this.updateLevel();
+                this.initParticleSystem();
                 this.bindEvents();
                 this.startGame();
             }
@@ -898,6 +1133,195 @@
             updateRecordDisplay() {
                 this.recordHolderElement.textContent = this.bestScoreName;
                 this.recordScoreElement.textContent = this.bestScore;
+            }
+            
+            initParticleSystem() {
+                // Crear partículas de hojas cayendo
+                this.createParticles();
+                setInterval(() => {
+                    if (this.gameRunning) {
+                        this.createParticles();
+                    }
+                }, 2000);
+            }
+            
+            createParticles() {
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        const particle = document.createElement('div');
+                        particle.className = 'particle particle-fall';
+                        particle.style.left = Math.random() * 400 + 'px';
+                        particle.style.top = '-10px';
+                        
+                        this.gameContainer.appendChild(particle);
+                        this.particles.push(particle);
+                        
+                        // Eliminar partícula después de la animación
+                        setTimeout(() => {
+                            if (particle.parentNode) {
+                                particle.parentNode.removeChild(particle);
+                                const index = this.particles.indexOf(particle);
+                                if (index > -1) this.particles.splice(index, 1);
+                            }
+                        }, 4000);
+                    }, i * 500);
+                }
+            }
+            
+            spawnBanana() {
+                // Spawn banana ocasionalmente (30% chance)
+                if (Math.random() < 0.3) {
+                    const banana = document.createElement('div');
+                    banana.className = 'collectible-banana';
+                    banana.textContent = '🍌';
+                    banana.style.left = '450px';
+                    banana.style.top = (150 + Math.random() * 300) + 'px';
+                    
+                    // Event listener para recolectar
+                    banana.addEventListener('click', () => this.collectBanana(banana));
+                    banana.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        this.collectBanana(banana);
+                    });
+                    
+                    this.gameContainer.appendChild(banana);
+                    this.bananas.push({
+                        element: banana,
+                        x: 450
+                    });
+                }
+            }
+            
+            collectBanana(bananaElement) {
+                if (!this.gameRunning) return;
+                
+                this.bananaCount++;
+                this.updateBananaDisplay();
+                
+                // Efecto visual al recolectar
+                bananaElement.style.animation = 'none';
+                bananaElement.style.transform = 'scale(1.5)';
+                bananaElement.style.opacity = '0';
+                
+                // Sonido de recolección
+                this.playCollectSound();
+                
+                // Activar escudo si tiene 3 bananas
+                if (this.bananaCount >= 3) {
+                    this.activateShield();
+                    this.bananaCount -= 3;
+                    this.updateBananaDisplay();
+                }
+                
+                // Eliminar banana
+                setTimeout(() => {
+                    if (bananaElement.parentNode) {
+                        bananaElement.parentNode.removeChild(bananaElement);
+                    }
+                    const index = this.bananas.findIndex(b => b.element === bananaElement);
+                    if (index > -1) this.bananas.splice(index, 1);
+                }, 200);
+            }
+            
+            activateShield() {
+                this.isShielded = true;
+                this.shieldEndTime = Date.now() + 5000; // 5 segundos
+                
+                // Efecto visual en el mono
+                this.monkey.classList.add('shield-active');
+                
+                // Mostrar indicador
+                const shieldIndicator = document.createElement('div');
+                shieldIndicator.className = 'shield-indicator';
+                shieldIndicator.textContent = '🛡️';
+                this.gameContainer.appendChild(shieldIndicator);
+                
+                // Sonido de activación
+                this.playShieldSound();
+                
+                // Eliminar escudo después del tiempo
+                setTimeout(() => {
+                    this.isShielded = false;
+                    this.monkey.classList.remove('shield-active');
+                    if (shieldIndicator.parentNode) {
+                        shieldIndicator.parentNode.removeChild(shieldIndicator);
+                    }
+                }, 5000);
+            }
+            
+            updateBananaDisplay() {
+                this.bananaCountElement.textContent = `🍌 x ${this.bananaCount}`;
+                
+                // Efecto visual cuando se acerca a 3
+                if (this.bananaCount === 2) {
+                    this.bananaCountElement.style.animation = 'shieldPulse 0.5s ease-in-out 3';
+                }
+            }
+            
+            updateCombo() {
+                this.combo++;
+                this.comboTimer = Date.now() + 3000; // 3 segundos para mantener combo
+                
+                if (this.combo >= 2) {
+                    this.comboCounterElement.textContent = `COMBO x${this.combo}`;
+                    this.comboCounterElement.style.display = 'block';
+                    
+                    // Efecto de puntuación extra
+                    const bonusPoints = Math.floor(this.combo / 2);
+                    this.score += bonusPoints;
+                    this.scoreElement.textContent = `Puntuación: ${this.score}`;
+                    
+                    // Efecto visual
+                    this.comboCounterElement.style.animation = 'none';
+                    setTimeout(() => {
+                        this.comboCounterElement.style.animation = 'comboGlow 0.5s ease-in-out';
+                    }, 10);
+                }
+            }
+            
+            resetCombo() {
+                this.combo = 0;
+                this.comboCounterElement.style.display = 'none';
+            }
+            
+            playCollectSound() {
+                if (!this.audioContext) return;
+                
+                const oscillator = this.audioContext.createOscillator();
+                const gainNode = this.audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(this.audioContext.destination);
+                
+                // Sonido de recolección - campanilla
+                oscillator.frequency.setValueAtTime(800, this.audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(1200, this.audioContext.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(0.2, this.audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.2);
+                oscillator.type = 'sine';
+                
+                oscillator.start(this.audioContext.currentTime);
+                oscillator.stop(this.audioContext.currentTime + 0.2);
+            }
+            
+            playShieldSound() {
+                if (!this.audioContext) return;
+                
+                const oscillator = this.audioContext.createOscillator();
+                const gainNode = this.audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(this.audioContext.destination);
+                
+                // Sonido de escudo - power up
+                oscillator.frequency.setValueAtTime(400, this.audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(800, this.audioContext.currentTime + 0.3);
+                gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.5);
+                oscillator.type = 'square';
+                
+                oscillator.start(this.audioContext.currentTime);
+                oscillator.stop(this.audioContext.currentTime + 0.5);
             }
             
             updateLevel() {
@@ -1066,11 +1490,11 @@
                 // Reproducir sonido de salto
                 this.playSound('jump');
                 
-                // Animación de salto
-                this.monkey.style.transform = 'rotate(-20deg)';
+                // Animación de salto mejorada
+                this.monkey.classList.add('monkey-flap');
                 setTimeout(() => {
-                    this.monkey.style.transform = 'rotate(0deg)';
-                }, 150);
+                    this.monkey.classList.remove('monkey-flap');
+                }, 300);
             }
             
             gameLoop() {
@@ -1101,9 +1525,18 @@
                 // Mover árboles
                 this.updateTrees();
                 
+                // Mover bananas
+                this.updateBananas();
+                
+                // Verificar combo timer
+                if (this.comboTimer > 0 && Date.now() > this.comboTimer) {
+                    this.resetCombo();
+                }
+                
                 // Spawn árboles basado en el tiempo y nivel actual
                 if (Date.now() >= this.nextTreeTime) {
                     this.spawnTree();
+                    this.spawnBanana(); // Chance de spawn banana
                     this.nextTreeTime = Date.now() + this.spawnRate;
                 }
                 
@@ -1171,9 +1604,15 @@
                     
                     // Comprobar colisión
                     if (this.checkCollision(tree)) {
-                        this.playSound('hit');
-                        this.gameOver();
-                        return;
+                        if (this.isShielded) {
+                            // Con escudo, solo resetear combo pero no morir
+                            this.resetCombo();
+                            this.playCollectSound(); // Sonido de protección
+                        } else {
+                            this.playSound('hit');
+                            this.gameOver();
+                            return;
+                        }
                     }
                     
                     // Comprobar puntuación
@@ -1182,6 +1621,15 @@
                         this.score++;
                         this.scoreElement.textContent = `Puntuación: ${this.score}`;
                         this.updateLevel();
+                        
+                        // Sistema de combos
+                        const timeSinceLastTree = Date.now() - this.lastTreeTime;
+                        if (timeSinceLastTree < 2000) { // Menos de 2 segundos = combo
+                            this.updateCombo();
+                        } else {
+                            this.resetCombo();
+                        }
+                        this.lastTreeTime = Date.now();
                         
                         // Efecto de puntuación
                         this.scoreElement.style.transform = 'scale(1.2)';
@@ -1195,6 +1643,22 @@
                         tree.top.remove();
                         tree.bottom.remove();
                         this.trees.splice(i, 1);
+                    }
+                }
+            }
+            
+            updateBananas() {
+                for (let i = this.bananas.length - 1; i >= 0; i--) {
+                    const banana = this.bananas[i];
+                    banana.x -= this.treeSpeed;
+                    
+                    // Actualizar posición visual
+                    banana.element.style.left = banana.x + 'px';
+                    
+                    // Eliminar bananas fuera de pantalla
+                    if (banana.x < -50) {
+                        banana.element.remove();
+                        this.bananas.splice(i, 1);
                     }
                 }
             }
@@ -1290,12 +1754,42 @@
                 });
                 this.trees = [];
                 
+                // Limpiar bananas
+                this.bananas.forEach(banana => {
+                    banana.element.remove();
+                });
+                this.bananas = [];
+                
+                // Limpiar partículas
+                this.particles.forEach(particle => {
+                    if (particle.parentNode) {
+                        particle.parentNode.removeChild(particle);
+                    }
+                });
+                this.particles = [];
+                
+                // Limpiar efectos del escudo
+                this.monkey.classList.remove('shield-active');
+                const shieldIndicators = this.gameContainer.querySelectorAll('.shield-indicator');
+                shieldIndicators.forEach(indicator => indicator.remove());
+                
                 // Resetear valores
                 this.monkeyY = 250;
                 this.monkeyVelocity = 0;
                 this.score = 0;
                 this.level = 1;
+                this.bananaCount = 0;
+                this.isShielded = false;
+                this.combo = 0;
+                this.comboTimer = 0;
+                this.lastTreeTime = 0;
+                
+                // Actualizar displays
                 this.scoreElement.textContent = 'Puntuación: 0';
+                this.updateBananaDisplay();
+                this.resetCombo();
+                
+                // Ocultar pantallas
                 this.gameOverScreen.style.display = 'none';
                 this.levelUpScreen.style.display = 'none';
                 this.newRecordScreen.style.display = 'none';
