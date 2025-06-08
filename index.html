@@ -262,12 +262,8 @@
             font-size: 20px;
             z-index: 10;
             animation: bananaFloat 2s ease-in-out infinite;
-            cursor: pointer;
+            pointer-events: none; /* No interferir con clicks del juego */
             transition: all 0.2s ease;
-        }
-
-        .collectible-banana:hover {
-            transform: scale(1.2);
         }
 
         @keyframes bananaFloat {
@@ -1216,13 +1212,7 @@
                         const bananaY = safeGapStart + (safeGapHeight / 2) - 10; // Centro del gap seguro
                         banana.style.top = bananaY + 'px';
                         
-                        // Event listener para recolectar
-                        banana.addEventListener('click', () => this.collectBanana(banana));
-                        banana.addEventListener('touchstart', (e) => {
-                            e.preventDefault();
-                            this.collectBanana(banana);
-                        });
-                        
+                        // No necesitamos event listeners - se recoge automáticamente por colisión
                         this.gameContainer.appendChild(banana);
                         this.bananas.push({
                             element: banana,
@@ -1461,7 +1451,8 @@
                         e.target.tagName === 'INPUT' ||
                         e.target.closest('#gameOver') ||
                         e.target.closest('#newRecord') ||
-                        e.target.closest('#musicControl')) {
+                        e.target.closest('#musicControl') ||
+                        e.target.classList.contains('collectible-banana')) {
                         return;
                     }
                     this.jump();
@@ -1473,7 +1464,8 @@
                         e.target.tagName === 'INPUT' ||
                         e.target.closest('#gameOver') ||
                         e.target.closest('#newRecord') ||
-                        e.target.closest('#musicControl')) {
+                        e.target.closest('#musicControl') ||
+                        e.target.classList.contains('collectible-banana')) {
                         return;
                     }
                     e.preventDefault();
@@ -1565,7 +1557,7 @@
                 // Mover árboles
                 this.updateTrees();
                 
-                // Mover bananas
+                // Mover bananas y verificar colisión automática
                 this.updateBananas();
                 
                 // Verificar combo timer
@@ -1702,6 +1694,28 @@
                     
                     // Actualizar posición visual
                     banana.element.style.left = banana.x + 'px';
+                    
+                    // Verificar colisión automática con el mono
+                    const monkeyLeft = 88;
+                    const monkeyRight = 88 + 48;
+                    const monkeyTop = this.monkeyY;
+                    const monkeyBottom = this.monkeyY + 48;
+                    
+                    const bananaLeft = banana.x;
+                    const bananaRight = banana.x + 20;
+                    const bananaTop = parseInt(banana.element.style.top);
+                    const bananaBottom = bananaTop + 20;
+                    
+                    // Detección de colisión con el mono
+                    if (monkeyRight > bananaLeft && 
+                        monkeyLeft < bananaRight && 
+                        monkeyBottom > bananaTop && 
+                        monkeyTop < bananaBottom) {
+                        
+                        // Recoger banana automáticamente
+                        this.collectBanana(banana.element);
+                        continue; // La banana se elimina en collectBanana
+                    }
                     
                     // Eliminar bananas fuera de pantalla
                     if (banana.x < -50) {
