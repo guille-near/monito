@@ -1,0 +1,20 @@
+{
+  "worldRecord": {
+    "score": 0,
+    "player": "MONITO",
+    "date": "2025-01-08",
+    "level": 1
+  },
+  "topPlayers": [
+    {
+      "rank": 1,
+      "score": 0,
+      "player": "MONITO",
+      "date": "2025-01-08",
+      "level": 1
+    }
+  ],
+  "lastUpdated": "2025-01-08T00:47:00.000Z",
+  "totalGames": 0,
+  "version": "1.0"
+}
