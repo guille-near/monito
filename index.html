@@ -720,8 +720,29 @@
             }
         }
 
-        /* Media Queries para móvil */
+        /* Optimizaciones de rendimiento para móvil */
         @media (max-width: 480px) {
+            /* Simplificar animaciones para mejorar rendimiento */
+            .parallax-layer {
+                display: none; /* Desactivar parallax en móvil */
+            }
+            
+            .wind-effect {
+                display: none; /* Desactivar efecto viento en móvil */
+            }
+            
+            .particle {
+                display: none; /* Reducir partículas en móvil */
+            }
+            
+            /* Simplificar animaciones */
+            .floating-leaf {
+                animation-duration: 6s; /* Más lento para menos carga */
+            }
+            
+            .collectible-banana {
+                animation-duration: 3s; /* Simplificar animación banana */
+            }
             #birthday-message {
                 font-size: 18px;
                 padding: 8px 12px;
@@ -941,6 +962,9 @@
                 this.musicEnabled = localStorage.getItem('musicEnabled') !== 'false'; // Por defecto activada
                 this.initBackgroundMusic();
                 
+                // Detectar si es móvil para optimizar rendimiento
+                this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 480;
+                
                 this.monkeyY = 250;
                 this.monkeyVelocity = 0;
                 this.gravity = 0.5;
@@ -967,18 +991,18 @@
                 this.baseSpawnRate = 3000;
                 this.nextPipeTime = 0;
                 
-                // Sistema de niveles
+                // Sistema de niveles - Aumentadas distancias entre árboles
                 this.levels = [
-                    { name: "Principiante", scoreRequired: 0, pipeGap: 220, speed: 1.0, spawnRate: 3000, gravity: 0.3 },
-                    { name: "Novato", scoreRequired: 3, pipeGap: 180, speed: 1.4, spawnRate: 2600, gravity: 0.4 },
-                    { name: "Aprendiz", scoreRequired: 8, pipeGap: 170, speed: 1.6, spawnRate: 2400, gravity: 0.45 },
-                    { name: "Intermedio", scoreRequired: 15, pipeGap: 160, speed: 1.8, spawnRate: 2200, gravity: 0.5 },
-                    { name: "Avanzado", scoreRequired: 25, pipeGap: 150, speed: 2.0, spawnRate: 2000, gravity: 0.52 },
-                    { name: "Experto", scoreRequired: 35, pipeGap: 140, speed: 2.2, spawnRate: 1800, gravity: 0.55 },
-                    { name: "Maestro", scoreRequired: 48, pipeGap: 130, speed: 2.4, spawnRate: 1600, gravity: 0.58 },
-                    { name: "Leyenda", scoreRequired: 65, pipeGap: 125, speed: 2.6, spawnRate: 1400, gravity: 0.6 },
-                    { name: "Mítico", scoreRequired: 85, pipeGap: 120, speed: 2.8, spawnRate: 1200, gravity: 0.62 },
-                    { name: "Imposible", scoreRequired: 110, pipeGap: 110, speed: 3.0, spawnRate: 1000, gravity: 0.65 }
+                    { name: "Principiante", scoreRequired: 0, pipeGap: 220, speed: 1.0, spawnRate: 4000, gravity: 0.3 },
+                    { name: "Novato", scoreRequired: 3, pipeGap: 180, speed: 1.4, spawnRate: 3500, gravity: 0.4 },
+                    { name: "Aprendiz", scoreRequired: 8, pipeGap: 170, speed: 1.6, spawnRate: 3200, gravity: 0.45 },
+                    { name: "Intermedio", scoreRequired: 15, pipeGap: 160, speed: 1.8, spawnRate: 3000, gravity: 0.5 },
+                    { name: "Avanzado", scoreRequired: 25, pipeGap: 150, speed: 2.0, spawnRate: 2800, gravity: 0.52 },
+                    { name: "Experto", scoreRequired: 35, pipeGap: 140, speed: 2.2, spawnRate: 2600, gravity: 0.55 },
+                    { name: "Maestro", scoreRequired: 48, pipeGap: 130, speed: 2.4, spawnRate: 2400, gravity: 0.58 },
+                    { name: "Leyenda", scoreRequired: 65, pipeGap: 125, speed: 2.6, spawnRate: 2200, gravity: 0.6 },
+                    { name: "Mítico", scoreRequired: 85, pipeGap: 120, speed: 2.8, spawnRate: 2000, gravity: 0.62 },
+                    { name: "Imposible", scoreRequired: 110, pipeGap: 110, speed: 3.0, spawnRate: 1800, gravity: 0.65 }
                 ];
                 
                 this.init();
@@ -1146,49 +1170,65 @@
             }
             
             createParticles() {
-                for (let i = 0; i < 3; i++) {
+                // Reducir partículas en móvil para mejor rendimiento
+                const particleCount = this.isMobile ? 1 : 3;
+                const delay = this.isMobile ? 1000 : 500;
+                
+                for (let i = 0; i < particleCount; i++) {
                     setTimeout(() => {
-                        const particle = document.createElement('div');
-                        particle.className = 'particle particle-fall';
-                        particle.style.left = Math.random() * 400 + 'px';
-                        particle.style.top = '-10px';
-                        
-                        this.gameContainer.appendChild(particle);
-                        this.particles.push(particle);
-                        
-                        // Eliminar partícula después de la animación
-                        setTimeout(() => {
-                            if (particle.parentNode) {
-                                particle.parentNode.removeChild(particle);
-                                const index = this.particles.indexOf(particle);
-                                if (index > -1) this.particles.splice(index, 1);
-                            }
-                        }, 4000);
-                    }, i * 500);
+                        if (!this.isMobile) { // Solo crear partículas en desktop
+                            const particle = document.createElement('div');
+                            particle.className = 'particle particle-fall';
+                            particle.style.left = Math.random() * 400 + 'px';
+                            particle.style.top = '-10px';
+                            
+                            this.gameContainer.appendChild(particle);
+                            this.particles.push(particle);
+                            
+                            // Eliminar partícula después de la animación
+                            setTimeout(() => {
+                                if (particle.parentNode) {
+                                    particle.parentNode.removeChild(particle);
+                                    const index = this.particles.indexOf(particle);
+                                    if (index > -1) this.particles.splice(index, 1);
+                                }
+                            }, 4000);
+                        }
+                    }, i * delay);
                 }
             }
             
-            spawnBanana() {
-                // Spawn banana ocasionalmente (30% chance)
-                if (Math.random() < 0.3) {
+            spawnBanana(gapStart, gapSize) {
+                // Spawn banana ocasionalmente (30% chance) y solo si hay suficiente espacio
+                if (Math.random() < 0.3 && gapSize >= 150) {
                     const banana = document.createElement('div');
                     banana.className = 'collectible-banana';
                     banana.textContent = '🍌';
                     banana.style.left = '450px';
-                    banana.style.top = (150 + Math.random() * 300) + 'px';
                     
-                    // Event listener para recolectar
-                    banana.addEventListener('click', () => this.collectBanana(banana));
-                    banana.addEventListener('touchstart', (e) => {
-                        e.preventDefault();
-                        this.collectBanana(banana);
-                    });
+                    // Posicionar banana en el centro del gap seguro, con margen de seguridad
+                    const safeMargin = 40; // Margen de seguridad arriba y abajo
+                    const safeGapStart = gapStart + safeMargin;
+                    const safeGapEnd = gapStart + gapSize - safeMargin;
+                    const safeGapHeight = safeGapEnd - safeGapStart;
                     
-                    this.gameContainer.appendChild(banana);
-                    this.bananas.push({
-                        element: banana,
-                        x: 450
-                    });
+                    if (safeGapHeight > 60) { // Solo si el gap seguro es suficientemente grande
+                        const bananaY = safeGapStart + (safeGapHeight / 2) - 10; // Centro del gap seguro
+                        banana.style.top = bananaY + 'px';
+                        
+                        // Event listener para recolectar
+                        banana.addEventListener('click', () => this.collectBanana(banana));
+                        banana.addEventListener('touchstart', (e) => {
+                            e.preventDefault();
+                            this.collectBanana(banana);
+                        });
+                        
+                        this.gameContainer.appendChild(banana);
+                        this.bananas.push({
+                            element: banana,
+                            x: 450
+                        });
+                    }
                 }
             }
             
@@ -1535,8 +1575,10 @@
                 
                 // Spawn árboles basado en el tiempo y nivel actual
                 if (Date.now() >= this.nextTreeTime) {
-                    this.spawnTree();
-                    this.spawnBanana(); // Chance de spawn banana
+                    const treeInfo = this.spawnTree();
+                    if (treeInfo) {
+                        this.spawnBanana(treeInfo.gapStart, treeInfo.gapSize); // Banana en gap seguro
+                    }
                     this.nextTreeTime = Date.now() + this.spawnRate;
                 }
                 
@@ -1591,6 +1633,12 @@
                     x: 400,
                     scored: false
                 });
+                
+                // Devolver información del gap para posicionar bananas
+                return {
+                    gapStart: gapStart,
+                    gapSize: this.treeGap
+                };
             }
             
             updateTrees() {
